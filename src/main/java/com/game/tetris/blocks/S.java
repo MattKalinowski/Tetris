@@ -7,7 +7,7 @@ import java.util.LinkedList;
 
 public class S extends Block {
 
-    public S(Handler handler) {
+    public S(int interval, Handler handler) {
         super(handler);
     }
 
@@ -32,7 +32,7 @@ public class S extends Block {
     }
 
     @Override
-    public void rotate() {
+    protected void setOrientation(Orientation orientation) {
 
     }
 }

@@ -9,22 +9,24 @@ import java.util.LinkedList;
 public class I extends Block {
 
     private LinkedList<Square> squares = new LinkedList<>();
-    private Orientation orientation = Orientation.HORIZONTAL;
 
     public I(Handler handler, Grid grid) {
         super(handler);
-        Color color = Color.CYAN;
-        squares.add(new Square(grid, 172, -32, color));
-        squares.add(new Square(grid, 204, -32, color));
-        squares.add(new Square(grid, 236, -32, color));
-        squares.add(new Square(grid, 268, -32, color));
+        //Color color = Color.CYAN;
+        squares.add(new Square(grid, 192, 256, Color.CYAN));
+        squares.add(new Square(grid, 224, 256, Color.BLUE));
+        squares.add(new Square(grid, 256, 256, Color.RED));
+        squares.add(new Square(grid, 288, 256, Color.PINK));
     }
 
     @Override
     public void tick() {
+        dropBlock();
+    }
+
+    private void dropBlock() {
         for (Square square : squares) {
-            square.setPositionX(square.getPositionX() + square.getVelocityX());
-            square.setPositionY(square.getPositionY() + square.getVelocityY());
+            square.setPositionY(square.getPositionY()); // + 32
         }
     }
 
@@ -46,86 +48,44 @@ public class I extends Block {
     }
 
     @Override
-    public void rotate() {
-        switch (orientation) {
-            case HORIZONTAL:
-                orientation = Orientation.VERTICAL;
-                setOrientation(Orientation.VERTICAL);
-                break;
-            case VERTICAL:
-                orientation = Orientation.HORIZONTAL_LEFT;
-                setOrientation(Orientation.HORIZONTAL_LEFT);
-                break;
-            case HORIZONTAL_LEFT:
-                orientation = Orientation.VERTICAL_LEFT;
-                setOrientation(Orientation.VERTICAL_LEFT);
-                break;
-            case VERTICAL_LEFT:
-                orientation = Orientation.HORIZONTAL;
-                setOrientation(Orientation.HORIZONTAL);
-                break;
+    protected void setOrientation(Orientation orientation) {
+        int right = 1;
+        int left = -1;
+
+        if (orientation == Orientation.HORIZONTAL) {
+            setHorizontal(right);
         }
-    }
-
-    private void setOrientation(Orientation orientation) {
         if (orientation == Orientation.VERTICAL) {
-            float rotationAxisX = squares.get(2).getPositionX();
-            float rotationAxisY = squares.get(2).getPositionY();
-
-            squares.get(0).setPositionX(rotationAxisX);
-            squares.get(0).setPositionY(rotationAxisY - 64);
-
-            squares.get(1).setPositionX(rotationAxisX);
-            squares.get(1).setPositionY(rotationAxisY - 32);
-
-            squares.get(3).setPositionX(rotationAxisX);
-            squares.get(3).setPositionY(rotationAxisY + 32);
-
+            setVertical(right);
         }
         if (orientation == Orientation.HORIZONTAL_LEFT) {
-            float rotationAxisX = squares.get(1).getPositionX();
-            float rotationAxisY = squares.get(1).getPositionY();
-
-            squares.get(0).setPositionX(rotationAxisX - 64);
-            squares.get(0).setPositionY(rotationAxisY);
-
-            squares.get(1).setPositionX(rotationAxisX - 32);
-            squares.get(1).setPositionY(rotationAxisY);
-
-            squares.get(2).setPositionY(rotationAxisY);
-
-            squares.get(3).setPositionX(rotationAxisX + 32);
-            squares.get(3).setPositionY(rotationAxisY);
-
+            setHorizontal(left);
         }
         if (orientation == Orientation.VERTICAL_LEFT) {
-            float rotationAxisX = squares.get(1).getPositionX();
-            float rotationAxisY = squares.get(1).getPositionY();
-
-            squares.get(0).setPositionX(rotationAxisX);
-            squares.get(0).setPositionY(rotationAxisY + 64);
-
-            squares.get(2).setPositionX(rotationAxisX);
-            squares.get(2).setPositionY(rotationAxisY + 32);
-
-            squares.get(3).setPositionX(rotationAxisX);
-            squares.get(3).setPositionY(rotationAxisY - 32);
-
-        }
-        if (orientation == Orientation.HORIZONTAL) {
-            float rotationAxisX = squares.get(2).getPositionX();
-            float rotationAxisY = squares.get(2).getPositionY();
-
-            squares.get(0).setPositionX(rotationAxisX - 32);
-            squares.get(0).setPositionY(rotationAxisY);
-
-            squares.get(1).setPositionY(rotationAxisY);
-
-            squares.get(2).setPositionX(rotationAxisX + 32);
-            squares.get(2).setPositionY(rotationAxisY);
-
-            squares.get(3).setPositionX(rotationAxisX + 64);
-            squares.get(3).setPositionY(rotationAxisY);
+            setVertical(left);
         }
     }
+
+    private void setVertical(int direction) {
+        squares.get(0).setPositionX(squares.get(0).getPositionX() + (64 * direction));
+        squares.get(0).setPositionY(squares.get(0).getPositionY() - (64 * direction));
+
+        squares.get(1).setPositionX(squares.get(1).getPositionX() + (32 * direction));
+        squares.get(1).setPositionY(squares.get(1).getPositionY() - (32 * direction));
+
+        squares.get(3).setPositionX(squares.get(3).getPositionX() - (32 * direction));
+        squares.get(3).setPositionY(squares.get(3).getPositionY() + (32 * direction));
+    }
+
+    private void setHorizontal(int direction) {
+        squares.get(0).setPositionX(squares.get(0).getPositionX() - (32 * direction));
+        squares.get(0).setPositionY(squares.get(0).getPositionY() - (32 * direction));
+
+        squares.get(2).setPositionX(squares.get(2).getPositionX() + (32 * direction));
+        squares.get(2).setPositionY(squares.get(2).getPositionY() + (32 * direction));
+
+        squares.get(3).setPositionX(squares.get(3).getPositionX() + (64 * direction));
+        squares.get(3).setPositionY(squares.get(3).getPositionY() + (64 * direction));
+    }
+
 }

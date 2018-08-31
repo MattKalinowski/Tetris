@@ -32,7 +32,7 @@ public class O extends Block {
     }
 
     @Override
-    public void rotate() {
+    protected void setOrientation(Orientation orientation) {
 
     }
 }

@@ -10,45 +10,74 @@ public class Square {
 
     private Grid grid;
     private float positionX, positionY;
-    private float velocityX, velocityY;
     private Color color;
 
     public Square(Grid grid, float positionX, float positionY, Color color) {
         this.grid = grid;
         this.positionX = positionX;
         this.positionY = positionY;
-        //this.velocityY = 1; // 32
         this.color = color;
 
         grid.addSquare(this);
     }
 
     public void tick() {
-        collision();
+        positionX = PositionHelper.clamp(positionX, 96, Game.PLAYFIELD_WIDTH + 63);
+        positionY = PositionHelper.clamp(positionY, 0, Game.PLAYFIELD_HEIGHT);
+        //collision1();
+        //collision2();
+        //collision3();
     }
 
-    private void collision() {
+    private void collision3() {
+        for (Square square : grid.getSquares()) {
+            if (!square.equals(this)) {
+
+            }
+        }
+    }
+
+    private void collision2() {
+        for (Square square : grid.getSquares()) {
+            if (!square.equals(this)) {
+                if (Math.abs(square.getPositionX() - positionX) < 32) {
+                    if (positionX < square.getPositionX()) {
+                        System.out.println("test1");
+                        positionX = square.getPositionX() - 32;
+                    }
+                    if (positionX >= square.getPositionX()) {
+                        System.out.println("test2");
+                        positionX = square.getPositionX() + 32;
+                    }
+                }
+                if (Math.abs(square.getPositionY() - positionY) < 32) {
+                    System.out.println("square.getPositionY() = " + square.getPositionY() + " positionY = " + positionY);
+                    if (positionY < square.getPositionY()) {
+                        System.out.println("test3");
+                        //positionY = square.getPositionY() - 32;
+                    }
+
+                }
+            }
+        }
+    }
+
+    private void collision1() {
         for (Square square : grid.getSquares()) {
             if (!square.equals(this) && this.getBounds().intersects(square.getBounds())) {
                 if (positionX > square.getPositionX()) {
                     System.out.println("test1");
-                    positionX = PositionHelper.clamp(positionX, positionX + 1, positionX + 1);
+                    positionX = PositionHelper.clamp(positionX, square.getPositionX() + 33, square.getPositionX() + 33);
                 } else if (positionX < square.getPositionX()) {
                     System.out.println("test2");
-                    positionX = PositionHelper.clamp(positionX, positionX - 1, positionX - 1);
+                    positionX = PositionHelper.clamp(positionX, square.getPositionX() - 33, square.getPositionX() - 33);
                 } else if (positionY > square.getPositionY()) {
                     System.out.println("test3");
-                    positionY = PositionHelper.clamp(positionY, positionY + 1, positionY + 1);
+                    positionY = PositionHelper.clamp(positionY, square.getPositionY() + 33, square.getPositionY() + 33);
                 } else if (positionY < square.getPositionY()) {
                     System.out.println("test4");
-                    positionY = PositionHelper.clamp(positionY, positionY - 1, positionY - 1);
+                    positionY = PositionHelper.clamp(positionY, square.getPositionY() - 33, square.getPositionY() - 33);
                 }
-            } else if (positionX > Game.PLAYFIELD_WIDTH + 63 || positionX <= 96) {
-                positionX = PositionHelper.clamp(positionX, 96, Game.PLAYFIELD_WIDTH + 63);
-            } else if (positionY > Game.PLAYFIELD_HEIGHT - 1) {
-                positionY = PositionHelper.clamp(positionY, 0, Game.PLAYFIELD_HEIGHT - 1);
-            } else {
-                setVelocityY(1);
             }
         }
     }
@@ -80,19 +109,4 @@ public class Square {
         this.positionY = positionY;
     }
 
-    public float getVelocityX() {
-        return velocityX;
-    }
-
-    public void setVelocityX(float velocityX) {
-        this.velocityX = velocityX;
-    }
-
-    public float getVelocityY() {
-        return velocityY;
-    }
-
-    public void setVelocityY(float velocityY) {
-        this.velocityY = velocityY;
-    }
 }

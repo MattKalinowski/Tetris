@@ -47,7 +47,10 @@ public class Game extends Canvas implements Runnable {
         g.fillRect(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
         g.setColor(Color.GRAY);
         g.fillRect(96, 32, PLAYFIELD_WIDTH, PLAYFIELD_HEIGHT);
+        grid.render(g);
         handler.render(g);
+        g.setColor(Color.BLACK);
+        g.fillRect(0,0, SCREEN_WIDTH, 32); // black stripe covers new blocks on the top of the window
         //hud.render(g);
         g.dispose();
         bs.show();

@@ -1,15 +1,24 @@
 package com.game.tetris;
 
 import com.game.tetris.blocks.Block;
+import com.game.tetris.blocks.I;
 
 import java.awt.*;
 import java.util.LinkedList;
 
 public class Handler {
+
     private LinkedList<Block> blocks = new LinkedList<>();
+
+    private int interval = 50;
+
     public void tick() {
         for (Block block : blocks) {
-            block.tick();
+            interval -= 1;
+            if (interval == 0) {
+                block.tick();
+                interval = 50;
+            }
         }
     }
 
